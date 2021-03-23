@@ -2,6 +2,7 @@
 #Alien Invasion bullet class file
 import pygame
 from pygame.sprite import Sprite
+import random
 
 class Bullet(Sprite):
     '''A class to manage bullets fired from the ship'''
@@ -27,6 +28,8 @@ class Bullet(Sprite):
         self.y -= self.settings.bullet_speed
         #update the rect position
         self.rect.y = self.y
+        bullet_speed_list = [0.75, 1.0, 1.25, 1.5]
+        self.settings.bullet_speed = bullet_speed_list[random.randrange(len(bullet_speed_list))]
 
     def draw_bullet(self):
         '''Draw the bullet to the screen'''
