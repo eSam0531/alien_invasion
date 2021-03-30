@@ -14,7 +14,6 @@
 # loses a ship. If the player loses three ships, the game ends.
 #
 import sys
-import random
 from time import sleep
 import pygame
 from settings import Settings
@@ -22,7 +21,6 @@ from game_stats import GameStats
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
-import random
 
 class AlienInvasion:
     '''Overall class to manage game assets and behavior.'''
@@ -97,16 +95,16 @@ class AlienInvasion:
         if len(self.bullets) < self.settings.bullets_allowed:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
-                
+
     def _update_bullets(self):
         '''Update positionof bullets and get rid of old bullets.'''
         #Update bullet positions.
         self.bullets.update()
 
         #Get rid of bullets that have disappeard.
-        # for bullet in self.bullets.copy():
-        #     if bullet.rect.bottom <= 0:
-        #         self.bullets.remove(bullet)
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
             #used to test if bullets were being removed
             #print(len(self.bullets))
 
@@ -141,7 +139,7 @@ class AlienInvasion:
         # Create the full fleet of aliens.
         for row_number in range(number_rows):
             for alien_number in range(number_aliens_x):
-                self._create_alien(alien_number, row_number)         
+                self._create_alien(alien_number, row_number)           
 
     def _create_alien(self, alien_number, row_number):
         '''Create an alien and place it in the row.'''
@@ -154,11 +152,9 @@ class AlienInvasion:
 
     def _check_fleet_edges(self):
         '''Respond appropriately if any aliens have reached an edge.'''
-        alien_speed_list = [0.75, 1.0, 1.25, 1.5]
         for alien in self.aliens.sprites():
             if alien.check_edges():
                 self._change_fleet_direction()
-                self.settings.alien_speed = alien_speed_list[random.randrange(len(alien_speed_list))]
                 break
 
     def _change_fleet_direction(self):
