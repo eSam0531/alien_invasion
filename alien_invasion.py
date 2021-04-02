@@ -1,6 +1,4 @@
 # alien_invasion.py
-# Esmeralda Samarripa
-# CISA 4359 Spring 2021
 # Project 1 - From Textbook: Python Crash Course 2nd edition
 #
 # In Alien Invasion, the player controls a rocket ship that appears
