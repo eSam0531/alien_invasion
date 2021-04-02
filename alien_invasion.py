@@ -52,7 +52,10 @@ class AlienInvasion:
         self._create_fleet()
 
         # Make the Play button.
-        self.play_button = Button(self, "Play")
+        self.play_button = Button(self, 300, 200, "Play")
+        self.levelup_button = Button(self, 300, 255, "Level Up")
+        self.leveldown_button = Button(self, 300, 310, "Level Down")
+        self.reset_button = Button(self, 300, 365, "Reset")
         
     def run_game(self):
         'Start the main loop for the game.'
@@ -79,29 +82,61 @@ class AlienInvasion:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 self._check_play_button(mouse_pos)
+                self._check_levelup_button(mouse_pos)
+                self._check_leveldown_button(mouse_pos)
+                self._check_reset_button(mouse_pos)
 
     def _check_play_button(self, mouse_pos):
         '''Start a new game when the player clicsk Play.'''
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.stats.game_active:
-            # Reset the game statistics.
-            self.settings.initialize_dynamic_settings() 
-            self.stats.reset_stats()
             self.stats.game_active = True
             self.sb.prep_score()
             self.sb.prep_level()
             self.sb.prep_ships()
 
-            # Get rid of any remaining aliens and bullets.
-            self.aliens.empty()
-            self.bullets.empty()
-
             # Create a new fleet and center the ship.
             self._create_fleet()
             self.ship.center_ship()
 
+            #Increase speed and points according to level input by user
+            for level in range(self.stats.level):
+                self.settings.increase_speed()
+
             #Hide the mouse cursor.
             pygame.mouse.set_visible(False)
+
+    def _check_levelup_button(self, mouse_pos):
+        button_clicked = self.levelup_button.rect.collidepoint(mouse_pos)
+        if button_clicked and not self.stats.game_active:
+            self.stats.level += 1
+        
+        self.sb.prep_level()
+        self._update_screen()
+
+    def _check_leveldown_button(self, mouse_pos):
+        button_clicked = self.leveldown_button.rect.collidepoint(mouse_pos)
+        if button_clicked and not self.stats.game_active:
+            self.stats.level -= 1
+            self.settings
+
+        self.sb.prep_level()
+        self._update_screen()
+
+    def _check_reset_button(self, mouse_pos):
+        button_clicked = self.reset_button.rect.collidepoint(mouse_pos)
+        if button_clicked and not self.stats.game_active:
+            # Reset the game statistics.
+            self.settings.initialize_dynamic_settings() 
+            self.stats.reset_stats()
+            self.sb.prep_score()
+            self.sb.prep_level()
+            self.sb.prep_ships()
+            # Get rid of any remaining aliens and bullets.
+            self.aliens.empty()
+            self.bullets.empty()
+        
+        self._update_screen()
 
     def _check_keydown_events(self,event):
         '''Respond to keypresses.'''
@@ -267,6 +302,9 @@ class AlienInvasion:
         # Draw the play button if the game is inactive.
         if not self.stats.game_active:
             self.play_button.draw_button()
+            self.levelup_button.draw_button()
+            self.leveldown_button.draw_button()
+            self.reset_button.draw_button()
             
         # Make the most recently drawn screen visible.
         pygame.display.flip()
