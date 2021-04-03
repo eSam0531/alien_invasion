@@ -98,8 +98,9 @@ class AlienInvasion:
             self.ship.center_ship()
 
             #Increase speed and points according to level input by user
-            for level in range(self.stats.level):
-                self.settings.increase_speed()
+            if self.stats.level != 1:
+                for level in range(self.stats.level):
+                    self.settings.increase_speed()    
 
             #Hide the mouse cursor.
             pygame.mouse.set_visible(False)
@@ -155,7 +156,7 @@ class AlienInvasion:
             self.ship.moving_right = False
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
-
+   
     def _fire_bullet(self):
         '''Create a new bullet and add it to the bullets group'''
         if len(self.bullets) < self.settings.bullets_allowed:
