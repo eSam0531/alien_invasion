@@ -115,7 +115,7 @@ class AlienInvasion:
 
     def _check_leveldown_button(self, mouse_pos):
         button_clicked = self.leveldown_button.rect.collidepoint(mouse_pos)
-        if button_clicked and not self.stats.game_active:
+        if button_clicked and not self.stats.game_active and not self.stats.level == 1:
             self.stats.level -= 1
             self.settings
 
